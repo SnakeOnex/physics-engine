@@ -9,25 +9,46 @@ from pygame.locals import (
     K_LEFT,
     K_RIGHT,
     K_ESCAPE,
+    K_p,
     KEYDOWN,
     KEYUP,
     QUIT,
 )
 
-def draw_world_state(screen, object_dict):
+def draw_world_state(screen, object_dict, mp_ratio, world_size):
     for name, obj in object_dict.items():
-        obj.draw(screen)
+        obj.draw(screen, mp_ratio, world_size)
 
 if __name__ == '__main__':
     camera_size = (500, 500)
 
-    ## world init
+    # in meters 
+    world_size = (40, 40)
+
+    mp_ratio = camera_size[0] / world_size[0]
+    
+    # min precision (in meters)
+    min_prec = 1
+
+    ## world init (in meters)
     object_dict = {
-        "circle_1": Circle(radius=10,pos=(100,100), vel=(5,5), color=(220,0,120)),
-        "circle_2": Circle(radius=10,pos=(150,150), vel=(0,0), color=(220,90,120))
+        "circle_1": Circle(
+            radius=1,
+            pos=(10,35), 
+            vel=(0,0), 
+            acc=(-0.0,-0.9),
+            color=(220,0,120)
+        ),
+        "circle_2": Circle(
+            radius=1,
+            pos=(12,35), 
+            vel=(0,0),
+            acc=(0,-0.9),
+            color=(220,90,120)
+        )
     }
 
-    engine = Engine(object_dict)
+    engine = Engine(object_dict, min_prec)
 
     # pygame init
     pygame.init()
@@ -37,6 +58,7 @@ if __name__ == '__main__':
 
     # Run until the user asks to quit
     running = True
+    paused = True
     frame = 0
     while running:
         for event in pygame.event.get():
@@ -51,11 +73,18 @@ if __name__ == '__main__':
                     engine.update()
                     print("engine update")
 
+                if event.key == K_p:
+                    paused = not paused
+                    
+
         print("frame: ", frame)
         screen.fill((255, 255, 255))
 
+        if not paused:
+            engine.update()
+
         # draw world
-        draw_world_state(screen, engine.object_dict)
+        draw_world_state(screen, engine.object_dict, mp_ratio, world_size)
 
         # pygame.draw.circle(screen, (0, 0, 255), (250, 250), 75)
         pygame.display.flip()
