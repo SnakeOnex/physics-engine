@@ -45,6 +45,13 @@ if __name__ == '__main__':
             vel=np.array((0.,0.)), 
             acc=np.array((-0.1,-0.1)),
             color=(220,90,120)
+        ),
+        "circle_3": Circle(
+            radius=1.5,
+            pos=np.array((15.,25.)), 
+            vel=np.array((0.,0.)), 
+            acc=np.array((-0.1,-0.1)),
+            color=(220,90,120)
         )
     }
 
