@@ -1,5 +1,6 @@
 # Import and initialize the pygame library
 import pygame
+import numpy as np
 from objects import *
 from engine import Engine
 
@@ -28,22 +29,21 @@ if __name__ == '__main__':
     mp_ratio = camera_size[0] / world_size[0]
     
     # min precision (in meters)
-    min_prec = 1
+    min_prec = 0.10
 
     ## world init (in meters)
     object_dict = {
         "circle_1": Circle(
-            radius=1,
-            pos=(10,35), 
-            vel=(0,0), 
-            acc=(-0.0,-0.9),
+            radius=1.,
+            pos=np.array((10.,35.)), vel=np.array((0.,0.)), 
+            acc=np.array((-0.0,-0.9)),
             color=(220,0,120)
         ),
         "circle_2": Circle(
-            radius=1,
-            pos=(12,35), 
-            vel=(0,0),
-            acc=(0,-0.9),
+            radius=1.,
+            pos=np.array((10.,25.)), 
+            vel=np.array((0.,0.)), 
+            acc=np.array((-0.1,-0.1)),
             color=(220,90,120)
         )
     }
@@ -71,13 +71,12 @@ if __name__ == '__main__':
 
                 if event.key == K_RIGHT:
                     engine.update()
-                    print("engine update")
 
                 if event.key == K_p:
                     paused = not paused
                     
 
-        print("frame: ", frame)
+        # print("frame: ", frame)
         screen.fill((255, 255, 255))
 
         if not paused:
@@ -88,7 +87,7 @@ if __name__ == '__main__':
 
         # pygame.draw.circle(screen, (0, 0, 255), (250, 250), 75)
         pygame.display.flip()
-        clock.tick(30)
+        clock.tick(300)
         frame += 1
 
     pygame.quit()
